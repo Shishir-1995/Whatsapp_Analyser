@@ -5,17 +5,41 @@ def preprocess(data):
     pattern = "\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}\s\w{1,2}\s-\s"
 
     messages = re.split(pattern, data)[1:]
+    if len(messages) == 0:
+        pattern_alt = "\d{1,2}/\d{1,2}/\d{1,2},\s\d{1,2}:\d{1,2}\s-\s"
+        messages = re.split(pattern_alt, data)[1:]
     dates = re.findall(pattern, data)
+    if len(dates) ==0:
+        pattern_alt = "\d{1,2}/\d{1,2}/\d{1,2},\s\d{1,2}:\d{1,2}\s-\s"
+        dates = re.findall(pattern_alt, data)
 
     df = pd.DataFrame({'user_message': messages, 'message_date': dates})
-    try:
-        df['message_date'] = pd.to_datetime(df['message_date'], format='%d/%m/%y, %I:%M %p - ')
-    except (TypeError,ValueError):
-        df['message_date'] = pd.to_datetime(df['message_date'], format='%m/%d/%y, %I:%M %p - ')
-    except (ValueError, TypeError):
-        df['message_date'] = pd.to_datetime(df['message_date'], format='%m/%d/%y, %H:%M - ')
-    except (ValueError, TypeError):
-        df['message_date'] = pd.to_datetime(df['message_date'], format='%d/%m/%y, %H:%M - ')
+
+    if (len(df['message_date'][0])== 22):
+        if ((df['message_date'][0][-4] == 'm') or (df['message_date'][0][-4] == 'M')):
+            try:
+                df['message_date'] = pd.to_datetime(df['message_date'], format='%d/%m/%Y, %I:%M %p - ')
+            except(ValueError):
+                df['message_date'] = pd.to_datetime(df['message_date'], format='%m/%d/%Y, %I:%M %p - ')
+        else:
+            try:
+                df['message_date'] = pd.to_datetime(df['message_date'], format='%d/%m/%Y, %H:%M - ')
+            except(ValueError):
+                df['message_date'] = pd.to_datetime(df['message_date'], format='%m/%d/%Y, %H:%M - ')
+    else:
+        if ((df['message_date'][0][-4] == 'm') or (df['message_date'][0][-4] == 'M')):
+            try:
+                df['message_date'] = pd.to_datetime(df['message_date'], format='%d/%m/%y, %I:%M %p - ')
+            except(ValueError):
+                df['message_date'] = pd.to_datetime(df['message_date'], format='%m/%d/%y, %I:%M %p - ')
+        else:
+            try:
+                df['message_date'] = pd.to_datetime(df['message_date'], format='%d/%m/%y, %H:%M - ')
+            except(ValueError):
+                df['message_date'] = pd.to_datetime(df['message_date'], format='%m/%d/%y, %H:%M - ')
+
+    df['message_date'] = pd.to_datetime(df['message_date'], format='%x, %I:%M %p - ')
+
     df.rename(columns={'message_date': 'date'}, inplace=True)
 
     users = []
