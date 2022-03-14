@@ -10,8 +10,12 @@ def preprocess(data):
     df = pd.DataFrame({'user_message': messages, 'message_date': dates})
     try:
         df['message_date'] = pd.to_datetime(df['message_date'], format='%d/%m/%y, %I:%M %p - ')
-    except ValueError:
+    except (TypeError,ValueError):
         df['message_date'] = pd.to_datetime(df['message_date'], format='%m/%d/%y, %I:%M %p - ')
+    except (ValueError, TypeError):
+        df['message_date'] = pd.to_datetime(df['message_date'], format='%m/%d/%y, %H:%M - ')
+    except (ValueError, TypeError):
+        df['message_date'] = pd.to_datetime(df['message_date'], format='%d/%m/%y, %H:%M - ')
     df.rename(columns={'message_date': 'date'}, inplace=True)
 
     users = []
