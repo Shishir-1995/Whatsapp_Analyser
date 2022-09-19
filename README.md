@@ -2,6 +2,7 @@
 
 This analyses your whatsapp chat which is uploaded in .txt format and gives you insight on the group chat as well as personal chat. It doesn't read or save the content of the chat to maintain and respect the privacy of the user.
 
+
 ### Guideline to extract chat
 
 1. Open the individual or group chat.
@@ -71,7 +72,7 @@ Then it shows different types of data as graphs and maps to make it visually mor
 
 ### Read more about it <a href="https://www.irjmets.com/uploadedfiles/paper//issue_5_may_2022/22029/final/fin_irjmets1651575263.pdf" alt="NLP">here</a>
 
-
+#### Do checkout the project <a href="http://whatsapp-shishir.herokuapp.com/" alt="Project">Whatsapp_Analyse</a>
 
 
 
